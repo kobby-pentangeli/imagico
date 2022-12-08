@@ -1,0 +1,9 @@
+[package]
+name = "imagico"
+version = "0.1.0"
+description = "A command-line program for hiding secret messages in PNG files."
+authors = ["Kobby Pentangeli <kobbypentangeli@gmail.com>"]
+repository = "https://github.com/kobby-pentangeli/imagico"
+edition = "2021"
+
+[dependencies]
