@@ -1,34 +1,62 @@
 use crate::ProgramError;
 
+/// A validated PNG chunk type. See the PNG spec for more details.
+/// http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
 #[derive(Debug, PartialEq, Eq)]
 pub struct ChunkType {
     type_code: [u8; 4],
 }
 
 impl ChunkType {
+    /// Returns the raw bytes contained in this chunk
     pub fn bytes(&self) -> [u8; 4] {
         self.type_code
     }
 
+    /// Returns true if the reserved byte is valid and all four bytes are represented by the characters A-Z or a-z.
+    ///
+    /// Note that this chunk type should always be valid as it is validated during construction.
     pub fn is_valid(&self) -> bool {
-        self.type_code.is_ascii() && self.type_code[2].is_ascii_uppercase()
+        let bytes = self.bytes();
+        for i in 0..bytes.len() {
+            if !is_valid_byte(bytes[i]) {
+                return false;
+            }
+        }
+        if !self.is_reserved_bit_valid() {
+            return false;
+        }
+        true
     }
 
+    /// Returns the property state of the first byte as described in the PNG spec
     pub fn is_critical(&self) -> bool {
-        self.type_code[0].is_ascii_uppercase()
+        let anc = self.bytes()[0];
+        is_valid_byte(anc) && anc.is_ascii_uppercase()
     }
 
+    /// Returns the property state of the second byte as described in the PNG spec
     pub fn is_public(&self) -> bool {
-        self.type_code[1].is_ascii_uppercase()
+        let p = self.bytes()[1];
+        is_valid_byte(p) && p.is_ascii_uppercase()
     }
 
+    /// Returns the property state of the third byte as described in the PNG spec
     pub fn is_reserved_bit_valid(&self) -> bool {
-        self.type_code[2].is_ascii_uppercase()
+        let rsv = self.bytes()[2];
+        is_valid_byte(rsv) && rsv.is_ascii_uppercase()
     }
 
+    /// Returns the property state of the fourth byte as described in the PNG spec
     pub fn is_safe_to_copy(&self) -> bool {
-        self.type_code[3].is_ascii_lowercase()
+        let stc = self.bytes()[3];
+        is_valid_byte(stc) && stc.is_ascii_lowercase()
     }
+}
+
+/// Valid bytes are represented by the characters A-Z or a-z
+fn is_valid_byte(byte: u8) -> bool {
+    byte.is_ascii() && byte.is_ascii_alphabetic()
 }
 
 impl TryFrom<[u8; 4]> for ChunkType {
@@ -147,6 +175,7 @@ mod tests {
 
         let chunk = ChunkType::from_str("Ru1t");
         assert!(chunk.is_ok());
+        assert!(!chunk.unwrap().is_valid());
     }
 
     #[test]
