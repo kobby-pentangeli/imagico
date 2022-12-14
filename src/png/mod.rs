@@ -1,12 +1,14 @@
 //! Implements `Png` as described by the PNG specification.
 
-use crate::{
-    chunk::Chunk,
-    chunk_type::ChunkType,
-    error::{ProgramError, ProgramResult},
-};
+mod chunk;
+mod chunk_type;
+
+use crate::error::{ProgramError, ProgramResult};
 use core::str::FromStr;
 use std::io::{BufReader, Read};
+
+use chunk::Chunk;
+use chunk_type::ChunkType;
 
 /// A PNG container as described by the PNG spec
 /// http://www.libpng.org/pub/png/spec/1.2/PNG-Contents.html
@@ -137,7 +139,7 @@ impl core::fmt::Display for Png {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{chunk_type::ChunkType, utils::DICE_PNG};
+    use crate::utils::DICE_PNG;
     use std::convert::TryFrom;
     use std::str::FromStr;
 

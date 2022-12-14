@@ -1,7 +1,9 @@
 //! Implements the `ChunkType` as described by the PNG specification.
 
-use crate::error::{ProgramError, ProgramResult};
-use crate::utils::is_valid_byte;
+use crate::{
+    error::{ProgramError, ProgramResult},
+    utils::is_valid_byte,
+};
 
 /// A validated PNG chunk type. See the PNG spec for more details.
 /// http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html

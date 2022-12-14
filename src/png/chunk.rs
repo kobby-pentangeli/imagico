@@ -1,7 +1,7 @@
 //! Implements `Chunk` as described by the PNG specification.
 
+use super::chunk_type::ChunkType;
 use crate::{
-    chunk_type::ChunkType,
     error::{ProgramError, ProgramResult},
     utils::crc_checksum,
 };
