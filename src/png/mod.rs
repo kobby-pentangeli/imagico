@@ -1,7 +1,7 @@
 //! Implements `Png` as described by the PNG specification.
 
-mod chunk;
-mod chunk_type;
+pub mod chunk;
+pub mod chunk_type;
 
 use crate::error::{ProgramError, ProgramResult};
 use core::str::FromStr;
@@ -47,7 +47,9 @@ impl Png {
         {
             Ok(self.chunks.remove(pos))
         } else {
-            Err("No matching Chunk found for chunk type".into())
+            Err(ProgramError::ChunkOperationError(
+                "No matching Chunk found for chunk type".to_string(),
+            ))
         }
     }
 
@@ -76,8 +78,7 @@ impl Png {
         let chunks = self
             .chunks
             .iter()
-            .map(|x| x.as_bytes())
-            .flatten()
+            .flat_map(|x| x.as_bytes())
             .collect::<Vec<u8>>();
         self.header.iter().chain(chunks.iter()).copied().collect()
     }
@@ -94,9 +95,8 @@ impl TryFrom<&[u8]> for Png {
         reader.read_exact(&mut header)?;
         if header != Self::STANDARD_HEADER {
             return Err(
-                format!("Received header doesn't match with STANDARD HEADER; received: {:?}, expected: {:?}",
-                header, Self::STANDARD_HEADER)
-                .into()
+                ProgramError::TryFromError(format!("Received header doesn't match with STANDARD HEADER; received: {:?}, expected: {:?}",
+                header, Self::STANDARD_HEADER))
             );
         }
 

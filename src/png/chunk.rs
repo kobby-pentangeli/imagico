@@ -89,7 +89,7 @@ impl TryFrom<&[u8]> for Chunk {
 
     fn try_from(bytes: &[u8]) -> ProgramResult<Self> {
         if bytes.is_empty() {
-            return Err("Chunk is empty".into());
+            return Err(ProgramError::TryFromError("Chunk is empty".to_string()));
         }
 
         let mut reader = BufReader::new(bytes);
@@ -99,7 +99,9 @@ impl TryFrom<&[u8]> for Chunk {
         reader.read_exact(&mut buffer)?;
         let length = u32::from_be_bytes(buffer);
         if length > MAX_LEN {
-            return Err("Length of data received exceeds MAX_LEN(2^31-1)".into());
+            return Err(ProgramError::TryFromError(
+                "Length of data received exceeds MAX_LEN(2^31-1)".to_string(),
+            ));
         }
 
         // 2. Read the `chunk_type` bytes
@@ -110,7 +112,7 @@ impl TryFrom<&[u8]> for Chunk {
         let mut data: Vec<u8> = vec![0; length as usize];
         reader.read_exact(&mut data)?;
         if data.len() != length as usize {
-            return Err("Length mismatch".into());
+            return Err(ProgramError::TryFromError("Length mismatch".to_string()));
         }
 
         // 4. Read the `crc` bytes
@@ -125,11 +127,10 @@ impl TryFrom<&[u8]> for Chunk {
             .collect();
         let expected_crc = crc_checksum(&chksm_bytes);
         if expected_crc != received_crc {
-            return Err(format!(
+            return Err(ProgramError::TryFromError(format!(
                 "CRC mismatch: expected: {}, received: {}",
                 expected_crc, received_crc
-            )
-            .into());
+            )));
         }
 
         Ok(Self {

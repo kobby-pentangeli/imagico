@@ -1,8 +1,7 @@
-mod args;
-mod commands;
-mod error;
-mod png;
-mod utils;
+pub mod args;
+pub mod error;
+pub mod png;
+pub mod utils;
 
 use error::ProgramResult;
 

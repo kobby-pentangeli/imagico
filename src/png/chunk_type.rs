@@ -23,8 +23,8 @@ impl ChunkType {
     /// Note that this chunk type should always be valid as it is validated during construction.
     pub fn is_valid(&self) -> bool {
         let bytes = self.bytes();
-        for i in 0..bytes.len() {
-            if !is_valid_byte(bytes[i]) {
+        for byte in &bytes {
+            if !is_valid_byte(*byte) {
                 return false;
             }
         }
@@ -64,7 +64,9 @@ impl TryFrom<[u8; 4]> for ChunkType {
 
     fn try_from(value: [u8; 4]) -> ProgramResult<Self> {
         if value.is_empty() {
-            Err("Chunk type code cannot be empty".into())
+            Err(ProgramError::TryFromError(
+                "Chunk type code cannot be empty".to_string(),
+            ))
         } else {
             Ok(Self { type_code: value })
         }
@@ -75,10 +77,11 @@ impl core::str::FromStr for ChunkType {
     type Err = ProgramError;
 
     fn from_str(s: &str) -> ProgramResult<Self> {
-        let bytes = s.as_bytes();
-        Ok(Self {
-            type_code: bytes[0..4].try_into()?,
-        })
+        let mut bytes = [0u8; 4];
+        for (idx, byte) in s.as_bytes().iter().enumerate() {
+            bytes[idx] = *byte;
+        }
+        Ok(Self { type_code: bytes })
     }
 }
 
