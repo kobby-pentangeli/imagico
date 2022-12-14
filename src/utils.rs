@@ -1,4 +1,4 @@
-//! Utility functions and types for implementing the PNG spec
+//! Implements utility functions and types for processing PNG files
 
 use crc::{Crc, CRC_32_ISO_HDLC};
 

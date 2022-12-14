@@ -1,11 +1,8 @@
-mod args;
-mod error;
-mod png;
-mod utils;
-
-use args::{command, App, Command};
 use clap::Parser;
-use error::ProgramResult;
+use imagico::{
+    args::{command, App, Command},
+    error::ProgramResult,
+};
 
 fn run(cmd: Command) -> ProgramResult<()> {
     match cmd {

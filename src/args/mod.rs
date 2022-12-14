@@ -3,18 +3,22 @@ use clap::{Args, Parser, Subcommand};
 use core::str::FromStr;
 use std::path::PathBuf;
 
+/// Corresponding functions for the various commands
 pub mod command;
 
+/// The parent struct for handling app commands and CLI arguments
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct App {
     /// Optional name of argument
     pub name: Option<String>,
 
+    /// Optional command(s)
     #[command(subcommand)]
     pub command: Option<Command>,
 }
 
+/// The commands supported by this app
 #[derive(Subcommand, Eq, PartialEq)]
 pub enum Command {
     /// Add a secret message to a PNG file
@@ -30,6 +34,7 @@ pub enum Command {
     Print(PrintArgs),
 }
 
+/// Possible encoding arguments
 #[derive(Args, Debug, Eq, PartialEq)]
 pub struct EncodeArgs {
     /// Path to the input PNG file
@@ -46,6 +51,7 @@ pub struct EncodeArgs {
     pub outfile_path: Option<PathBuf>,
 }
 
+/// Required arguments for a decode command
 #[derive(Args, Debug, Eq, PartialEq)]
 pub struct DecodeArgs {
     /// Path to the PNG file
@@ -56,6 +62,7 @@ pub struct DecodeArgs {
     pub chunk_type: ChunkType,
 }
 
+/// Required arguments for a remove command
 #[derive(Args, Debug, Eq, PartialEq)]
 pub struct RemoveArgs {
     /// Path to the PNG file
@@ -66,6 +73,7 @@ pub struct RemoveArgs {
     pub chunk_type: ChunkType,
 }
 
+/// Required arguments for a print command
 #[derive(Args, Debug, Eq, PartialEq)]
 pub struct PrintArgs {
     /// Path to the PNG file

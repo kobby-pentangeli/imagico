@@ -1,15 +1,19 @@
 /// Representing returned results for various operations in this application.
-pub type ProgramResult<T> = std::result::Result<T, ProgramError>;
+pub type ProgramResult<T> = Result<T, ProgramError>;
 
 /// Representing the various errors associated with this application.
 #[derive(Debug, thiserror::Error)]
 pub enum ProgramError {
+    /// Error originating from string conversion from
+    /// UTF-8 byte vector
     #[error("{0}")]
     StrFromUtf8Error(String),
 
+    /// Error from `TryFrom` trait implementations
     #[error("{0}")]
     TryFromError(String),
 
+    /// Error originating from manipulating PNG chunks
     #[error("{0}")]
     ChunkOperationError(String),
 }
