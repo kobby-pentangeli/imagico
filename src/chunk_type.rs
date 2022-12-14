@@ -1,4 +1,5 @@
 use crate::error::{ProgramError, ProgramResult};
+use crate::utils::is_valid_byte;
 
 /// A validated PNG chunk type. See the PNG spec for more details.
 /// http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
@@ -52,11 +53,6 @@ impl ChunkType {
         let stc = self.bytes()[3];
         is_valid_byte(stc) && stc.is_ascii_lowercase()
     }
-}
-
-/// Valid bytes are represented by the characters A-Z or a-z
-fn is_valid_byte(byte: u8) -> bool {
-    byte.is_ascii() && byte.is_ascii_alphabetic()
 }
 
 impl TryFrom<[u8; 4]> for ChunkType {

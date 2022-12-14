@@ -1,8 +1,8 @@
 use crate::{
     chunk_type::ChunkType,
     error::{ProgramError, ProgramResult},
+    utils::crc_checksum,
 };
-use crc::{Crc, CRC_32_ISO_HDLC};
 use std::io::{BufReader, Read};
 
 const MAX_LEN: u32 = 2_u32.pow(31) - 1;
@@ -26,7 +26,7 @@ impl Chunk {
             .copied()
             .chain(data.iter().cloned())
             .collect();
-        let crc = Crc::<u32>::new(&CRC_32_ISO_HDLC).checksum(&chksm_bytes);
+        let crc = crc_checksum(&chksm_bytes);
 
         Self {
             length: data.len() as u32,
@@ -121,7 +121,7 @@ impl TryFrom<&[u8]> for Chunk {
             .copied()
             .chain(data.iter().cloned())
             .collect();
-        let expected_crc = Crc::<u32>::new(&CRC_32_ISO_HDLC).checksum(&chksm_bytes);
+        let expected_crc = crc_checksum(&chksm_bytes);
         if expected_crc != received_crc {
             return Err(format!(
                 "CRC mismatch: expected: {}, received: {}",
