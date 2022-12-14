@@ -3,7 +3,7 @@ mod chunk;
 mod chunk_type;
 mod commands;
 mod error;
-mod img;
+mod png;
 mod utils;
 
 use error::ProgramResult;
