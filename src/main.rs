@@ -2,10 +2,10 @@ mod args;
 mod chunk;
 mod chunk_type;
 mod commands;
+mod error;
 mod img;
 
-pub type ProgramError = Box<dyn std::error::Error>;
-pub type ProgramResult<T> = std::result::Result<T, ProgramError>;
+use error::ProgramResult;
 
 fn main() -> ProgramResult<()> {
     todo!()

@@ -1,8 +1,8 @@
-use crate::ProgramError;
+use crate::error::{ProgramError, ProgramResult};
 
 /// A validated PNG chunk type. See the PNG spec for more details.
 /// http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ChunkType {
     type_code: [u8; 4],
 }
@@ -62,7 +62,7 @@ fn is_valid_byte(byte: u8) -> bool {
 impl TryFrom<[u8; 4]> for ChunkType {
     type Error = ProgramError;
 
-    fn try_from(value: [u8; 4]) -> Result<Self, Self::Error> {
+    fn try_from(value: [u8; 4]) -> ProgramResult<Self> {
         if value.is_empty() {
             Err("Chunk type code cannot be empty".into())
         } else {
@@ -74,7 +74,7 @@ impl TryFrom<[u8; 4]> for ChunkType {
 impl core::str::FromStr for ChunkType {
     type Err = ProgramError;
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
+    fn from_str(s: &str) -> ProgramResult<Self> {
         let bytes = s.as_bytes();
         Ok(Self {
             type_code: bytes[0..4].try_into()?,
