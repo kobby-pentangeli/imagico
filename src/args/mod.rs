@@ -3,20 +3,20 @@ use clap::{Args, Parser, Subcommand};
 use core::str::FromStr;
 use std::path::PathBuf;
 
-mod commands;
+pub mod command;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct App {
     /// Optional name of argument
-    name: Option<String>,
+    pub name: Option<String>,
 
     #[command(subcommand)]
-    command: Option<Commands>,
+    pub command: Option<Command>,
 }
 
 #[derive(Subcommand, Eq, PartialEq)]
-pub enum Commands {
+pub enum Command {
     /// Add a secret message to a PNG file
     Encode(EncodeArgs),
 

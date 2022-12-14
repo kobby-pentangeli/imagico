@@ -5,25 +5,13 @@ pub type ProgramResult<T> = std::result::Result<T, ProgramError>;
 #[derive(Debug, thiserror::Error)]
 pub enum ProgramError {
     #[error("{0}")]
-    ChunkFromStrError(String),
-
-    #[error("{0}")]
     StrFromUtf8Error(String),
 
     #[error("{0}")]
     TryFromError(String),
 
     #[error("{0}")]
-    FileEncodeError(String),
-
-    #[error("{0}")]
-    FileDecodeError(String),
-
-    #[error("{0}")]
     ChunkOperationError(String),
-
-    #[error("{0}")]
-    TryIntoError(String),
 }
 
 impl From<std::io::Error> for ProgramError {
