@@ -3,6 +3,8 @@ use clap::{Args, Parser, Subcommand};
 use core::str::FromStr;
 use std::path::PathBuf;
 
+mod commands;
+
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct App {
