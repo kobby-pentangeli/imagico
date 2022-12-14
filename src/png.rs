@@ -6,6 +6,7 @@ use crate::{
     error::{ProgramError, ProgramResult},
 };
 use core::str::FromStr;
+use std::io::{BufReader, Read};
 
 /// A PNG container as described by the PNG spec
 /// http://www.libpng.org/pub/png/spec/1.2/PNG-Contents.html
@@ -70,21 +71,66 @@ impl Png {
     /// Returns this `Png` as a byte sequence.
     /// These bytes will contain the header followed by the bytes of all of the chunks.
     pub fn as_bytes(&self) -> Vec<u8> {
-        todo!()
+        let chunks = self
+            .chunks
+            .iter()
+            .map(|x| x.as_bytes())
+            .flatten()
+            .collect::<Vec<u8>>();
+        self.header.iter().chain(chunks.iter()).copied().collect()
     }
 }
 
 impl TryFrom<&[u8]> for Png {
     type Error = ProgramError;
 
-    fn try_from(value: &[u8]) -> ProgramResult<Self> {
-        todo!()
+    fn try_from(bytes: &[u8]) -> ProgramResult<Self> {
+        let mut reader = BufReader::new(bytes);
+
+        // 1. Read the standard header
+        let mut header = [0u8; 8];
+        reader.read_exact(&mut header)?;
+        if header != Self::STANDARD_HEADER {
+            return Err(
+                format!("Received header doesn't match with STANDARD HEADER; received: {:?}, expected: {:?}",
+                header, Self::STANDARD_HEADER)
+                .into()
+            );
+        }
+
+        // 2. Iterate through the list of chunks and process each chunk
+        let mut chunks = vec![];
+        let mut data_len_buf = [0u8; 4];
+        // reads:
+        // ** `length` == 4 bytes
+        // ** `chunk_type` == 4 bytes
+        // ** `data` == `length` bytes
+        // ** `crc` == 4 bytes
+        while let Ok(()) = reader.read_exact(&mut data_len_buf) {
+            let chunk_position = 4 + u32::from_be_bytes(data_len_buf) + 4;
+            let mut chunk_buf = vec![0; chunk_position as usize];
+            reader.read_exact(&mut chunk_buf)?;
+            let chained_bytes = data_len_buf
+                .iter()
+                .copied()
+                .chain(chunk_buf.into_iter())
+                .collect::<Vec<u8>>();
+
+            let chunk = Chunk::try_from(chained_bytes.as_slice())?;
+            chunks.push(chunk);
+        }
+
+        Ok(Self::from_chunks(chunks))
     }
 }
 
 impl core::fmt::Display for Png {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        todo!()
+        writeln!(f, "STANDARD_HEADER: {:#?}", self.header())?;
+        for chunk in self.chunks() {
+            write!(f, "{}", chunk)?;
+        }
+        Ok(())
     }
 }
 
