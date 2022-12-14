@@ -1,16 +1,26 @@
+//! Utility functions and types for implementing the PNG spec
+
 use crc::{Crc, CRC_32_ISO_HDLC};
 
-/// Valid bytes are represented by the characters A-Z or a-z
+/// Valid bytes are represented by the characters `A-Z` or `a-z`
 pub fn is_valid_byte(byte: u8) -> bool {
     byte.is_ascii() && byte.is_ascii_alphabetic()
 }
 
+/// The 32-bit CRC register is initialized to all 1's, and then the data from each byte
+/// is processed from the least significant bit (1) to the most significant bit (128).
+///
+/// After all the data bytes are processed, the CRC register is inverted (its ones complement is taken).
+/// This value is transmitted (stored in the file) MSB first.
+///
+/// For the purpose of separating into bytes and ordering, the least significant bit of the 32-bit CRC
+/// is defined to be the coefficient of the `x^31` term.
 pub fn crc_checksum(bytes: &[u8]) -> u32 {
     Crc::<u32>::new(&CRC_32_ISO_HDLC).checksum(bytes)
 }
 
-// This is the raw bytes for a shrunken version of the `dice.png` image on Wikipedia
-pub const PNG_FILE: [u8; 4803] = [
+/// This is the raw bytes for a shrunken version of the `dice.png` image on Wikipedia
+pub const DICE_PNG: [u8; 4803] = [
     137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 50, 0, 0, 0, 50, 8, 6,
     0, 0, 0, 30, 63, 136, 177, 0, 0, 0, 1, 115, 82, 71, 66, 0, 174, 206, 28, 233, 0, 0, 0, 4, 103,
     65, 77, 65, 0, 0, 177, 143, 11, 252, 97, 5, 0, 0, 0, 9, 112, 72, 89, 115, 0, 0, 14, 194, 0, 0,

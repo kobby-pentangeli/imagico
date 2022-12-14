@@ -1,40 +1,74 @@
+//! Implements `Png` as described by the PNG specification.
+
 use crate::{
     chunk::Chunk,
+    chunk_type::ChunkType,
     error::{ProgramError, ProgramResult},
 };
+use core::str::FromStr;
 
+/// A PNG container as described by the PNG spec
+/// http://www.libpng.org/pub/png/spec/1.2/PNG-Contents.html
+#[derive(Debug)]
 pub struct Png {
     header: [u8; 8],
     chunks: Vec<Chunk>,
 }
 
 impl Png {
+    /// The first eight bytes of a PNG file,
+    /// which always contain the following (decimal) values:
     pub const STANDARD_HEADER: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
 
+    /// Creates a `Png` from a list of chunks using the correct header
     pub fn from_chunks(chunks: Vec<Chunk>) -> Self {
-        todo!()
+        Self {
+            header: Self::STANDARD_HEADER,
+            chunks,
+        }
     }
 
+    /// Appends a chunk to the end of this `Png` file's `Chunk` list.
     pub fn append_chunk(&mut self, chunk: Chunk) {
-        todo!()
+        self.chunks.push(chunk);
     }
 
+    /// Searches for a `Chunk` with the specified `chunk_type` and removes the first
+    /// matching `Chunk` from this `Png` list of chunks.
     pub fn remove_chunk(&mut self, chunk_type: &str) -> ProgramResult<Chunk> {
-        todo!()
+        let chunk_type = ChunkType::from_str(chunk_type)?;
+        if let Some(pos) = self
+            .chunks
+            .iter()
+            .position(|c| *c.chunk_type() == chunk_type)
+        {
+            Ok(self.chunks.remove(pos))
+        } else {
+            Err("No matching Chunk found for chunk type".into())
+        }
     }
 
+    /// The header of this PNG.
     pub fn header(&self) -> &[u8; 8] {
-        todo!()
+        &self.header
     }
 
+    /// Lists the `Chunk`s stored in this `Png`
     pub fn chunks(&self) -> &[Chunk] {
-        todo!()
+        &self.chunks
     }
 
+    /// Searches for a `Chunk` with the specified `chunk_type` and returns the first
+    /// matching `Chunk` from this `Png`.
     pub fn chunk_by_type(&self, chunk_type: &str) -> Option<&Chunk> {
-        todo!()
+        match ChunkType::from_str(chunk_type) {
+            Ok(cht) => self.chunks.iter().find(|c| *c.chunk_type() == cht),
+            Err(_) => None,
+        }
     }
 
+    /// Returns this `Png` as a byte sequence.
+    /// These bytes will contain the header followed by the bytes of all of the chunks.
     pub fn as_bytes(&self) -> Vec<u8> {
         todo!()
     }
@@ -57,9 +91,14 @@ impl core::fmt::Display for Png {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{chunk_type::ChunkType, utils::PNG_FILE};
+    use crate::{chunk_type::ChunkType, utils::DICE_PNG};
     use std::convert::TryFrom;
     use std::str::FromStr;
+
+    fn testing_png() -> Png {
+        let chunks = testing_chunks();
+        Png::from_chunks(chunks)
+    }
 
     fn testing_chunks() -> Vec<Chunk> {
         let mut chunks = Vec::new();
@@ -69,11 +108,6 @@ mod tests {
         chunks.push(chunk_from_strings("LASt", "I am the last chunk").unwrap());
 
         chunks
-    }
-
-    fn testing_png() -> Png {
-        let chunks = testing_chunks();
-        Png::from_chunks(chunks)
     }
 
     fn chunk_from_strings(chunk_type: &str, data: &str) -> ProgramResult<Chunk> {
@@ -184,15 +218,15 @@ mod tests {
 
     #[test]
     fn test_png_from_image_file() {
-        let png = Png::try_from(&PNG_FILE[..]);
+        let png = Png::try_from(&DICE_PNG[..]);
         assert!(png.is_ok());
     }
 
     #[test]
     fn test_as_bytes() {
-        let png = Png::try_from(&PNG_FILE[..]).unwrap();
+        let png = Png::try_from(&DICE_PNG[..]).unwrap();
         let actual = png.as_bytes();
-        let expected: Vec<u8> = PNG_FILE.iter().copied().collect();
+        let expected: Vec<u8> = DICE_PNG.iter().copied().collect();
         assert_eq!(actual, expected);
     }
 

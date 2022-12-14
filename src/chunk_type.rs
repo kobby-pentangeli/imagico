@@ -1,3 +1,5 @@
+//! Implements the `ChunkType` as described by the PNG specification.
+
 use crate::error::{ProgramError, ProgramResult};
 use crate::utils::is_valid_byte;
 
