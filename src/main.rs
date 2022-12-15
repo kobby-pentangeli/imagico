@@ -9,7 +9,7 @@ fn run(cmd: Command) -> ProgramResult<()> {
         Command::Encode(args) => command::encode(args),
         Command::Decode(args) => command::decode(args),
         Command::Remove(args) => command::remove(args),
-        Command::Print(args) => command::print_chunks(args),
+        Command::Print(args) => command::print(args),
     }
 }
 

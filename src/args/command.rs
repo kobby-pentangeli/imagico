@@ -46,7 +46,7 @@ pub fn remove(args: RemoveArgs) -> ProgramResult<()> {
 }
 
 /// Print all of the chunks in a PNG file
-pub fn print_chunks(args: PrintArgs) -> ProgramResult<()> {
+pub fn print(args: PrintArgs) -> ProgramResult<()> {
     let file_bytes = fs::read(&args.file_path)?;
     let png = Png::try_from(file_bytes.as_slice())?;
     for chunk in png.chunks() {
