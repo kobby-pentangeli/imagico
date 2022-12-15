@@ -11,8 +11,6 @@ The program currently has four(4) commands:
 
 This project is based on the the [pngme book](https://picklenerd.github.io/pngme_book/).
 
-<br>
-
 ### Setup
 
 Local installation:
@@ -27,41 +25,37 @@ Remote installation:
 cargo install --git https://github.com/kobby-pentangeli/imagico
 ```
 
-<br>
-
 ### Running
 
-- *Encode* (add) a secret message into a PNG file by overwriting the input file:
+- Encode (add) a secret message into a PNG file by overwriting the input file:
 
 ```bash
 imapp encode ./some-file.png RuST "Your secret message here"
 ```
 
-- *Encode* (add) a secret message into a PNG file without overwriting the original file:
+- Encode (add) a secret message into a PNG file without overwriting the original file:
 
 ```bash
 imapp encode ./inputfile.png RuST "Your secret message here" ./outputfile.png
 ```
 
-- *Decode* (show) a secret message:
+- Decode (show) a secret message:
 
 ```bash
 imapp decode ./some-file.png RuST
 ```
 
-- *Remove* the secret message:
+- Remove the secret message:
 
 ```bash
 imapp remove ./some-file.png RuST
 ```
 
-- *Print* out all chunks in a PNG file:
+- Print out all chunks in a PNG file:
 
 ```bash
 imapp print ./some-file.png
 ```
-
-<br>
 
 ### License
 
@@ -69,8 +63,6 @@ imapp print ./some-file.png
 Licensed under either of <a href="LICENSE-APACHE">Apache License, Version
 2.0</a> or <a href="LICENSE-MIT">MIT license</a> at your option.
 </sup>
-
-<br>
 
 <sub>
 Unless you explicitly state otherwise, any contribution intentionally submitted
