@@ -1,5 +1,4 @@
-/// Representing returned results for various operations in this application.
-pub type ProgramResult<T> = Result<T, ProgramError>;
+//! Error types
 
 /// Representing the various errors associated with this application.
 #[derive(Debug, thiserror::Error)]

@@ -1,7 +1,7 @@
 use clap::Parser;
 use imagico::{
     args::{command, App, Command},
-    error::ProgramResult,
+    ProgramResult,
 };
 
 fn run(cmd: Command) -> ProgramResult<()> {

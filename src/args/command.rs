@@ -1,7 +1,7 @@
 use super::{DecodeArgs, EncodeArgs, PrintArgs, RemoveArgs};
 use crate::{
-    error::ProgramResult,
     png::{chunk::Chunk, Png},
+    ProgramResult,
 };
 use std::convert::TryFrom;
 use std::fs;

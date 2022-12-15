@@ -1,10 +1,7 @@
 //! Implements `Chunk` as described by the PNG specification.
 
 use super::chunk_type::ChunkType;
-use crate::{
-    error::{ProgramError, ProgramResult},
-    utils::crc_checksum,
-};
+use crate::{error::ProgramError, utils::crc_checksum, ProgramResult};
 use std::io::{BufReader, Read};
 
 const MAX_LEN: u32 = 2_u32.pow(31) - 1;

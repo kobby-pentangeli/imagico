@@ -3,7 +3,7 @@
 pub mod chunk;
 pub mod chunk_type;
 
-use crate::error::{ProgramError, ProgramResult};
+use crate::{error::ProgramError, ProgramResult};
 use core::str::FromStr;
 use std::io::{BufReader, Read};
 
