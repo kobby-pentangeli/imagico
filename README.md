@@ -9,7 +9,7 @@ The program currently has four(4) commands:
 3. *Remove* a message from a PNG file;
 4. *Print* a list of PNG chunks that can be searched for messages.
 
-This project is based on the the [pngme book](https://picklenerd.github.io/pngme_book/).
+This project is based on the [pngme book](https://picklenerd.github.io/pngme_book/).
 
 ## Setup
 
