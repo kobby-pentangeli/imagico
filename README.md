@@ -11,7 +11,7 @@ The program currently has four(4) commands:
 
 This project is based on the the [pngme book](https://picklenerd.github.io/pngme_book/).
 
-### Setup
+## Setup
 
 Local installation:
 
@@ -25,7 +25,7 @@ Remote installation:
 cargo install --git https://github.com/kobby-pentangeli/imagico
 ```
 
-### Running
+## Running
 
 - Encode (add) a secret message into a PNG file by overwriting the input file:
 
@@ -57,7 +57,7 @@ imapp remove ./some-file.png RuST
 imapp print ./some-file.png
 ```
 
-### License
+## License
 
 <sup>
 Licensed under either of <a href="LICENSE-APACHE">Apache License, Version
