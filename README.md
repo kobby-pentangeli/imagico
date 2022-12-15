@@ -11,6 +11,8 @@ The program currently has four(4) commands:
 
 This project is based on the the [pngme book](https://picklenerd.github.io/pngme_book/).
 
+<br>
+
 ### Setup
 
 Local installation:
@@ -24,6 +26,8 @@ Remote installation:
 ```bash
 cargo install --git https://github.com/kobby-pentangeli/imagico
 ```
+
+<br>
 
 ### Running
 
@@ -56,6 +60,8 @@ imapp remove ./some-file.png RuST
 ```bash
 imapp print ./some-file.png
 ```
+
+<br>
 
 ### License
 
