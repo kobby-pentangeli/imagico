@@ -5,6 +5,7 @@ description = "A command-line program for hiding secret messages in PNG files."
 authors = ["Kobby Pentangeli <kobbypentangeli@gmail.com>"]
 repository = "https://github.com/kobby-pentangeli/imagico"
 readme = "README.md"
+license = "MIT or APACHE-2.0"
 keywords = ["cli", "parser", "png"]
 categories = ["parsing tools"]
 edition = "2021"
