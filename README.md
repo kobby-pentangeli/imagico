@@ -57,6 +57,16 @@ imapp remove ./some-file.png RuST
 imapp print ./some-file.png
 ```
 
+## Contributing
+
+Thank you for considering to contribute to this project!
+
+All contributions large and small are actively accepted.
+
+- To get started, please read the [contribution guidelines](https://github.com/kobby-pentangeli/imagico/blob/master/CONTRIBUTING.md).
+
+- Browse [Good First Issues](https://github.com/kobby-pentangeli/imagico/labels/good%20first%20issue).
+
 ## License
 
 Licensed under either of <a href="LICENSE-APACHE">Apache License, Version 2.0</a> or <a href="LICENSE-MIT">MIT license</a> at your option.
